@@ -1,0 +1,112 @@
+.body {
+  background: #222222;  /* fallback for old browsers */
+ /*  background: -webkit-linear-gradient(to right, #434343, #000000); */  /* Chrome 10-25, Safari 5.1-6 */
+ /*  background: linear-gradient(to right, #434343, #000000); */ /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
+  color: white;
+}
+
+g.parameter-value text {
+  fill:rgb(255, 255, 255)
+}
+
+g.tick text {
+  fill:rgb(255, 255, 255)
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  /* width: auto; */
+  height: auto;
+  stroke: #ffffff;
+  padding: 2px;
+  font: 16px sans-serif;
+
+  /* background: rgb(255, 240, 189); */
+  background: #ff0000b6;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.select {
+  cursor: pointer;
+  border-radius: 5px;
+  background: rgb(245, 136, 136);
+}
+
+select option {
+  background: rgb(230,230,250);  /*cor da caixa*/
+}
+
+.yearRange {
+  border-radius: 5px;
+  background: rgb(230,230,250); /*cor do slider*/
+  color: black
+}
+
+/* (A) BASIC CUSTOM DROPDOWN MECHANICS */
+/* (A1) HIDE DEFAULT ARROW */
+.cselect select { appearance: none; }
+
+/* (A2) DEFINE OUR OWN CUSTOM ARROW */
+.cselect::after { content: "\1F6C6";
+                  font-size:16px ;
+                  font-weight: 1000;
+                  transform: rotate(90deg);}
+
+/* (A3) POSITION CUSTOM ARROW */
+.cselect { position: relative; }
+.cselect::after {
+  position: absolute;
+  top: 0; right: 0;
+}
+
+/* (B) DIMENSTIONS */
+/* (B1) MAKE <SELECT> FILL THE WRAPPER */
+.cselect select { width: 100%; }
+.cselect { max-width: 400px; } /* OPTIONAL */
+
+/* (B2) ALL SAME HEIGHT */
+.cselect, .cselect::after, .cselect select {
+  box-sizing: border-box;
+  height: 40px;
+}
+
+/* (B3) A SQUARE CUSTOM ARROW BOX */
+/* ADD BORDER-RADIUS: 50% TO TURN IT CIRCLE */
+.cselect::after { width: 40px; border-radius: 50% }
+/* (C) COSMETICS */
+/* (C1) OVERRIDE DEFAULT SELECT BOX STYLES */
+.cselect select {
+  border: 1px solid rgb(230,230,250);/*cor do rebordo da caixa*/
+  background: rgb(230,230,250); /*cor da caixa*/
+  padding: 5px 10px;
+}
+
+/* (C2) DROPDOWN ARROW BOX */
+.cselect::after {
+  /* COLORS */
+  color: rgb(175, 0, 0);
+  background: rgb(230,230,250);  /*cor inicial da seta da caixa*/
+  
+  /* CENTER ARROW IN BOX */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* (C3) FUNKY ANIMATIONS */
+.cselect::after { transition: all 0.3s; }
+.cselect:hover::after {
+  transform: rotate(180deg);
+  background: rgb(230,230,250); /*cor final da seta da caixa*/
+  color: rgb(175, 0, 0);
+}
+
+/* (C4) REMOVE DEFAULT HIGHLIGHTS */
+.cselect select:active,
+.cselect select:focus,
+.cselect select:hover {
+  outline: none;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>VI Global Terrorism</title>
+  <script src="script.js"></script>
+  <script src="d3js.js"></script>
+  <script src="scale.js"></script>
+  <script src="geo.js"></script>
+  <script src="d3-simple-slider.js"></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<link rel="stylesheet" src="slider.css"
+  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+
+  <body class="body" onload="init()">
+    <div style="font-family: -webkit-body; font-size: 50px; display: flex; justify-content: center; background: #333333;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #b10101, #490000);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, darkred, #380000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    ">Global Terrorism Cases Around The World</div>
+    <div style="width: auto; height: 50px; float: left">
+      <div style="width: 1500px; height: auto; float: left; margin-top: 10px; margin-left: 10px; display: flex; justify-content: center;">
+        <div class="cselect" style="margin-right: 10px">
+            <select class="select" id="selectButton">
+              <option>Select a country</option>
+            </select>
+        </div>
+        <div class="cselect" style="margin-right: 10px">
+          <select class="select" id="selectTargetType">
+            <option>Select the Target Type</option>
+          </select>
+        </div>
+        <div class="cselect" style="margin-right: 10px">
+          <select class="select" id="selectAttackType">
+            <option>Select the Attack Type</option>
+          </select>
+        </div>
+        <div class="yearRange" style="width: 230px; height: 40px; float: left; border: 1px solid rgb(118, 118, 118); display: flex; flex-direction: row;">
+          <p id="value-range" style="width: auto; height: auto; float: left; margin-top: 6px; margin-left: 10px; border: 1px solid rgb(230,230,250);"></p>
+        </div>
+        <div id="slider-range" style="width: auto; height: auto; float: left; display: flex; flex-direction: column; align-items: center;">
+        </div>
+      </div>
+      <div style="width: 745px; height: auto; float: left; margin-top: 20px; margin-left: 10px; display: flex; justify-content: center;">
+        
+      </div>
+    </div>
+    <div style="width: auto; height: auto;">
+      <div style="width: 745px; height: 470px; float: left; margin-left: 10px"><svg id="vi1" width="745" height="470"></svg>
+      </div>
+      <div style="width: 745px; height: 470px; float: left; margin-left: 10px;"><svg id="vi3" width="745" height="470"></svg>
+      </div>
+      <div style="width: 745px; height: 260px; float: left; margin-left: 10px"><svg id="vi2" width="745" height="260"></svg></div>
+      <div style="width: 745px; height: 260px; float: left; margin-left: 10px"><svg id="vi4" width="745" height="260"></svg>
+      </div>
+    </div>
+  </body>
+
+</html>
