@@ -1,0 +1,3 @@
+data abstraction
+falta sequencial (temperatura), divergente (altitude) ou ciclica (hora)
+falta dizer se é hierarquico
