@@ -1,0 +1,3 @@
+adicionar uma explicacao para a limitacao da interatividade
+melhorar o storyboard para ser mais focado
+explicitar que perguntas estao a ser respondidas
