@@ -1,0 +1,19 @@
+OHLC: explicar melhor o que são no graph (e.g.: pop-up)
+
+Labels nos candle sticks (OHCL e data)
+
+Add eixo Y nas barras
+
+Customizar o candle bar com o rolling avg e BB (explicitar isto no relatório)
+
+Add mouse hover aos idiomas (opcional para o candle bar)
+
+Comparar cotação de 2 dias (Highlight de 2 OHLC) - embaixo do OHCL do hover colocar o OHLC do dia clicado
+
+Grava novo vídeo com mouse hover tanto no candle quanto nas barras embaixo
+
+Pop-up quando mouse hover nas barras
+
+Configurar as barras de volume e log returns para width constante
+
+Exagerar nas imagens no relatório para usar as 3 páginas
