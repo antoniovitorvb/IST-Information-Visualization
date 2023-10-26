@@ -62,6 +62,13 @@ function createVolumeHistogram(data, containerId) {
         .attr("font-size", "14px")
         .style("font-weight", "bold")
         .text("Volume Histogram");
+
+    svg.append("text")
+        .attr("class", "animated-label")
+        .attr("x", 10)
+        .attr("y", 10)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px");
 }
 
 function updateVolumeHistogram(data, containerId) {
@@ -127,14 +134,3 @@ function updateVolumeHistogram(data, containerId) {
         .remove();
 
 }
-
-function formatVolume(volume) {
-    if (volume >= 1e6) {
-        return (volume / 1e6).toFixed(1) + 'M';
-    } else if (volume >= 1e3) {
-        return (volume / 1e3).toFixed(1) + 'K';
-    } else {
-        return volume;
-    }
-}
-

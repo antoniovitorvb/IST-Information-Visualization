@@ -1,5 +1,5 @@
-let priceData;
-let newsData;
+let priceData, newsData, totalData;
+let pipSize, pipDigits;
 
 const margin = { top: 10, right: 20, bottom: 20, left: 60 };
 
@@ -26,14 +26,29 @@ async function selectNewsData(base, quote, impact, start, end) {
 }
 
 function mergePriceAndNewsData() {
-    priceData.forEach(price => {
+    totalData = priceData.map(price => {
         const priceTime = parsePriceDate(price.Time);
-        price.News = newsData.filter(news => {
+        const newsForPrice = newsData.filter(news => {
             const newsTime = parseNewsDate(news.Time);
             newsTime.setMinutes(0, 0, 0);
             return newsTime.getTime() === priceTime.getTime();
         });
+        return {
+            ...price,
+            News: newsForPrice
+        };
     });
+}
+
+function determinePipSizeDigits() {
+    const averageClose = d3.mean(priceData, d => +d.Close);
+    if (averageClose > 2) {
+        pipSize = 0.01;
+        pipDigits = 3;
+    } else {
+        pipSize = 0.0001;
+        pipDigits = 5;
+    }
 }
 
 async function selectData() {
@@ -48,17 +63,18 @@ async function selectData() {
     const start = parseSelectorDate(`${startDate} ${startTime}`);
     const end = parseSelectorDate(`${endDate} ${endTime}`);
     await selectPriceData(asset, start, end);
+    determinePipSizeDigits();
     await selectNewsData(base, quote, impact, start, end);
     mergePriceAndNewsData();
 }
 
 async function createDashboard() {
     await selectData();
-    createCandlestickChart(priceData, "candlestick-chart");
-    createVolumeHistogram(priceData, "volume-histogram");
-    createLogReturnChart(priceData, "log-return-line-chart");
-    createATRChart(priceData, "atr-line-chart");
-    createVerticalLine(priceData, "charts-section");
+    createCandlestickChart(totalData, "candlestick-chart");
+    createVolumeHistogram(totalData, "volume-histogram");
+    createLogReturnChart(totalData, "log-return-line-chart");
+    createATRChart(totalData, "atr-line-chart");
+    createVerticalLine(totalData);
     toggleElement('sma20-toggle');
     toggleElement('sma50-toggle');
     toggleElement('bollinger-toggle');
@@ -67,11 +83,11 @@ async function createDashboard() {
 
 async function updateDashboard() {
     await selectData();
-    updateCandlestickChart(priceData, "candlestick-chart");
-    updateVolumeHistogram(priceData, "volume-histogram");
-    updateLogReturnChart(priceData, "log-return-line-chart");
-    updateATRChart(priceData, "atr-line-chart");
-    updateVerticalLine(priceData, "charts-section");
+    updateCandlestickChart(totalData, "candlestick-chart");
+    updateVolumeHistogram(totalData, "volume-histogram");
+    updateLogReturnChart(totalData, "log-return-line-chart");
+    updateATRChart(totalData, "atr-line-chart");
+    updateVerticalLine(totalData);
     toggleElement('sma20-toggle');
     toggleElement('sma50-toggle');
     toggleElement('bollinger-toggle');

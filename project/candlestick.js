@@ -51,9 +51,6 @@ function createCandlestickChart(data, containerId) {
         .attr("stroke", "#ccc")
         .attr("stroke-dasharray", "5,5");
 
-    const averageClose = d3.mean(data, d => +d.Close);
-    const decimalPlaces = determineDecimalPlaces(averageClose);
-
     svg.selectAll(".horizontalLabel")
         .data(horizontalLinesData)
         .enter().append("text")
@@ -63,7 +60,7 @@ function createCandlestickChart(data, containerId) {
         .attr("text-anchor", "end")
         .attr("alignment-baseline", "middle")
         .attr("font-size", "10px")
-        .text(d => d.toFixed(decimalPlaces));
+        .text(d => d.toFixed(pipDigits));
 
     svg.append("text")
         .attr("class", "chartLabel")
@@ -139,6 +136,13 @@ function createCandlestickChart(data, containerId) {
         .on("mouseout", function() {
             d3.select(".tooltip").remove();
         });
+
+    svg.append("text")
+        .attr("class", "animated-label")
+        .attr("x", 10)
+        .attr("y", 10)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px");
 }
 
 function updateCandlestickChart(data, containerId) {
@@ -210,9 +214,6 @@ function updateCandlestickChart(data, containerId) {
         .attr("stroke-dasharray", "5,5");
     horizontalLines.exit().remove();
 
-    const averageClose = d3.mean(data, d => +d.Close);
-    const decimalPlaces = determineDecimalPlaces(averageClose);
-
     const horizontalLabels = svg.selectAll(".horizontalLabel").data(yAxis);
     horizontalLabels.enter().append("text")
         .attr("class", "horizontalLabel")
@@ -223,7 +224,7 @@ function updateCandlestickChart(data, containerId) {
         .merge(horizontalLabels)
         .transition(t)
         .attr("y", d => yScale(d))
-        .text(d => d.toFixed(decimalPlaces));
+        .text(d => d.toFixed(pipDigits));
     horizontalLabels.exit().remove();
 
     const sma20Line = d3.line()
@@ -287,12 +288,4 @@ function updateCandlestickChart(data, containerId) {
         .attr("r", 8)
         .attr("fill", "#ffec00");
     newsWarnings.exit().remove();
-}
-
-function determineDecimalPlaces(averageClose) {
-    if (averageClose > 2) {
-        return 3;
-    } else {
-        return 5;
-    }
 }

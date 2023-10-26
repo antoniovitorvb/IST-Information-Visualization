@@ -82,6 +82,13 @@ function createLogReturnChart(data, containerId) {
         .attr("font-size", "14px")
         .style("font-weight", "bold")
         .text("Log - Returns");
+
+    svg.append("text")
+        .attr("class", "animated-label")
+        .attr("x", 10)
+        .attr("y", 10)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px");
 }
 
 function updateLogReturnChart(data, containerId) {
@@ -147,8 +154,3 @@ function updateLogReturnChart(data, containerId) {
         .duration(750)
         .attr("y", yScale(0));
 }
-
-function formatLogReturn(value) {
-    return (value * 100).toFixed(2) + '%';
-}
-

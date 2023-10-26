@@ -1,3 +1,21 @@
+function formatVolume(volume) {
+    if (volume >= 1e6) {
+        return (volume / 1e6).toFixed(1) + 'M';
+    } else if (volume >= 1e3) {
+        return (volume / 1e3).toFixed(1) + 'K';
+    } else {
+        return volume;
+    }
+}
+
+function formatLogReturn(value) {
+    return (value * 100).toFixed(2) + '%';
+}
+
+function formatPriceInPips(value) {
+    return (value / pipSize).toFixed(2) + " Pips";
+}
+
 function xAxisGenerator(scale, ticks = 10) {
     const tickInterval = Math.ceil(scale.domain().length / ticks);
     return d3.axisBottom(scale)
@@ -27,13 +45,35 @@ function attachMouseEvents(data, container, verticalLine, xScale, paddingLeft) {
             return Math.abs(b - mouseX) < Math.abs(a - mouseX) ? b : a;
         });
         verticalLine.style("left", `${nearestDate + margin.left + paddingLeft}px`);
+
+        const nearestDataPoint = data[dates.indexOf(nearestDate)];
+        updateChartLabels(nearestDataPoint);
+
     }).on("mouseout", function() {
         verticalLine.style("display", "none");
     });
 }
 
-function createVerticalLine(data, containerId) {
-    const container = document.getElementById(containerId);
+function updateChartLabels(data) {
+    // Update the text label on the candlestick chart
+    d3.select("#candlestick-chart").select(".animated-label")
+        .html(`<tspan font-weight="bold">Date/Time:</tspan> ${data.Time} &emsp; <tspan font-weight="bold">Open:</tspan> ${data.Open} &emsp; <tspan font-weight="bold">High:</tspan> ${data.High} &emsp; <tspan font-weight="bold">Low:</tspan> ${data.Low} &emsp; <tspan font-weight="bold">Close:</tspan> ${data.Close}`);
+
+    // Update the text label on the Volume histogram
+    d3.select("#volume-histogram").select(".animated-label")
+        .html(`<tspan font-weight="bold">Volume:</tspan> ${formatVolume(data.Volume)}`);
+
+    // Update the text label on the Log Return chart
+    d3.select("#log-return-line-chart").select(".animated-label")
+        .html(`<tspan font-weight="bold">Log-Return:</tspan> ${formatLogReturn(data.Log_Return)}`);
+
+    // Update the text label on the ATR chart
+    d3.select("#atr-line-chart").select(".animated-label")
+        .html(`<tspan font-weight="bold">ATR:</tspan> ${formatPriceInPips(data.ATR)}`);
+}
+
+function createVerticalLine(data) {
+    const container = document.getElementById("charts-section");
     const computedStyle = window.getComputedStyle(container);
     const paddingLeft = parseFloat(computedStyle.paddingLeft);
     const paddingRight = parseFloat(computedStyle.paddingRight);
@@ -56,8 +96,8 @@ function createVerticalLine(data, containerId) {
     attachMouseEvents(data, container, verticalLine, xScale, paddingLeft);
 }
 
-function updateVerticalLine(data, containerId) {
-    const container = document.getElementById(containerId);
+function updateVerticalLine(data) {
+    const container = document.getElementById("charts-section");
     const computedStyle = window.getComputedStyle(container);
     const paddingLeft = parseFloat(computedStyle.paddingLeft);
     const paddingRight = parseFloat(computedStyle.paddingRight);
