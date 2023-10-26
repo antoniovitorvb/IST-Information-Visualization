@@ -75,6 +75,71 @@ function createCandlestickChart(data, containerId) {
         .attr("font-size", "14px")
         .style("font-weight", "bold")
         .text("Candlestick Chart + Indicators + News");
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "sma20")
+        .attr("fill", "none")
+        .attr("stroke", "blue")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+            .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
+            .y(d => yScale(d.SMA_20))
+        );
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "sma50")
+        .attr("fill", "none")
+        .attr("stroke", "orange")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+            .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
+            .y(d => yScale(d.SMA_50))
+        );
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "upperBollinger")
+        .attr("fill", "none")
+        .attr("stroke", "grey")
+        .attr("stroke-width", 1)
+        .attr("d", d3.line()
+            .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
+            .y(d => yScale(d.Upper_Bollinger_Band))
+        );
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "lowerBollinger")
+        .attr("fill", "none")
+        .attr("stroke", "grey")
+        .attr("stroke-width", 1)
+        .attr("d", d3.line()
+            .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
+            .y(d => yScale(d.Lower_Bollinger_Band))
+        );
+
+    svg.selectAll(".news-warning")
+        .data(data.filter(d => d.News && d.News.length))
+        .enter().append("circle")
+        .attr("class", "news-warning")
+        .attr("cx", d => xScale(d.Time) + xScale.bandwidth() / 2)
+        .attr("cy", d => yScale(d.High) - 15)
+        .attr("r", 8)
+        .attr("fill", "#ffec00")
+        .on("mouseover", function(event, d) {
+            // Display a tooltip with news details
+            const newsList = d.News.map(n => `${n.Impact.charAt(0) + n.Impact.slice(1).toLowerCase()} Impact: ${n.Name}`).join("<br>");
+            d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px")
+                .html(newsList);
+        })
+        .on("mouseout", function() {
+            d3.select(".tooltip").remove();
+        });
 }
 
 function updateCandlestickChart(data, containerId) {
@@ -161,6 +226,68 @@ function updateCandlestickChart(data, containerId) {
         .attr("y", d => yScale(d))
         .text(d => d.toFixed(decimalPlaces));
     horizontalLabels.exit().remove();
+
+    const sma20Line = d3.line()
+        .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
+        .y(d => yScale(d.SMA_20));
+
+    svg.select(".sma20")
+        .datum(data)
+        .transition(t)
+        .attr("d", sma20Line);
+
+    const sma50Line = d3.line()
+        .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
+        .y(d => yScale(d.SMA_50));
+
+    svg.select(".sma50")
+        .datum(data)
+        .transition(t)
+        .attr("d", sma50Line);
+
+    const upperBollingerLine = d3.line()
+        .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
+        .y(d => yScale(d.Upper_Bollinger_Band));
+
+    svg.select(".upperBollinger")
+        .datum(data)
+        .transition(t)
+        .attr("d", upperBollingerLine);
+
+    const lowerBollingerLine = d3.line()
+        .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
+        .y(d => yScale(d.Lower_Bollinger_Band));
+
+    svg.select(".lowerBollinger")
+        .datum(data)
+        .transition(t)
+        .attr("d", lowerBollingerLine);
+
+    const newsWarnings = svg.selectAll(".news-warning").data(data.filter(d => d.News && d.News.length));
+    newsWarnings.enter().append("circle")
+        .attr("class", "news-warning")
+        .attr("cx", d => xScale(d.Time) + xScale.bandwidth() / 2)
+        .attr("cy", d => yScale(d.High) - 15)
+        .attr("r", 8)
+        .attr("fill", "#ffec00")
+        .on("mouseover", function(event, d) {
+            const newsList = d.News.map(n => `${n.Impact.charAt(0) + n.Impact.slice(1).toLowerCase()} Impact: ${n.Name}`).join("<br>");
+            d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px")
+                .html(newsList);
+        })
+        .on("mouseout", function() {
+            d3.select(".tooltip").remove();
+        })
+        .merge(newsWarnings)
+        .transition(t)
+        .attr("cx", d => xScale(d.Time) + xScale.bandwidth() / 2)
+        .attr("cy", d => yScale(d.High) - 15)
+        .attr("r", 8)
+        .attr("fill", "#ffec00");
+    newsWarnings.exit().remove();
 }
 
 function determineDecimalPlaces(averageClose) {
@@ -170,3 +297,27 @@ function determineDecimalPlaces(averageClose) {
         return 5;
     }
 }
+
+function toggleIndicator(toggleId) {
+    const isDisplayed = document.getElementById(toggleId).checked;
+    let targetClass;
+    switch (toggleId) {
+        case 'sma20-toggle':
+            targetClass = '.sma20';
+            break;
+        case 'sma50-toggle':
+            targetClass = '.sma50';
+            break;
+        case 'bollinger-toggle':
+            targetClass = '.upperBollinger, .lowerBollinger';
+            break;
+        case 'news-toggle':
+            targetClass = '.news-warning';
+            break;
+        default:
+            return;
+    }
+    d3.selectAll(targetClass).style('display', isDisplayed ? 'block' : 'none');
+}
+
+

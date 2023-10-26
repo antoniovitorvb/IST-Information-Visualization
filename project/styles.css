@@ -13,7 +13,7 @@ body {
 }
 
 #charts-section {
-    flex: 0 0 65%;
+    flex: 0 0 75%;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -21,7 +21,6 @@ body {
 }
 
 #controls-heatmap-section {
-    flex: 1;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -49,6 +48,24 @@ body {
     gap: 20px;
 }
 
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.control-group label {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#controls > strong {
+    margin-bottom: 10px;
+}
+
 select, input {
     padding: 5px 10px;
     border: 1px solid #ccc;
@@ -62,3 +79,71 @@ select:focus, input:focus {
     border-color: #007BFF;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.switch input:checked + .slider {
+    background-color: #2196F3;
+}
+
+.switch input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+.switch input:checked + .slider:before {
+    -ms-transform: translateX(22px);
+    transform: translateX(22px);
+}
+
+.slider.round {
+    border-radius: 28px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.tooltip {
+    position: absolute;
+    padding: 5px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    pointer-events: none;
+}
+
