@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forex Trading Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="candlestick.js"></script>
+    <script src="volume.js"></script>
+    <script src="logreturn.js"></script>
+    <script src="atr.js"></script>
+    <script src="tools.js"></script>
+    <script src="main.js"></script>
+</head>
+<body onload="createDashboard()">
+<div id="dashboard">
+    <div id="charts-section">
+        <div id="candlestick-chart"></div>
+        <div id="volume-histogram"></div>
+        <div id="log-return-line-chart"></div>
+        <div id="atr-line-chart"></div>
+    </div>
+    <div id="controls-heatmap-section">
+        <div id="controls">
+            <strong>Indicator Settings</strong>
+            <div class="control-group">
+                <label for="asset-selector">Asset:</label>
+                <select id="asset-selector" onchange="updateDashboard()">
+                    <option value="AUDUSD">AUDUSD</option>
+                    <option value="EURUSD" selected>EURUSD</option>
+                    <option value="GBPUSD">GBPUSD</option>
+                    <option value="NZDUSD">NZDUSD</option>
+                    <option value="USDCAD">USDCAD</option>
+                    <option value="USDCHF">USDCHF</option>
+                    <option value="USDJPY">USDJPY</option>
+                </select>
+            </div>
+            <strong>Period Settings</strong>
+            <div class="control-group">
+                <label for="start-date">Start Date/Time:</label>
+                <input type="date" id="start-date" value="2019-01-02" onchange="updateDashboard()">
+                <input type="time" id="start-time" value="08:00" onchange="updateDashboard()">
+            </div>
+            <div class="control-group">
+                <label for="end-date">End Date/Time:</label>
+                <input type="date" id="end-date" value="2019-01-07" onchange="updateDashboard()">
+                <input type="time" id="end-time" value="08:00" onchange="updateDashboard()">
+            </div>
+            <strong>Indicator Settings</strong>
+            <div class="control-group">
+                <label class="switch">
+                    <input type="checkbox" id="sma20-toggle" checked onchange="toggleIndicator('sma20-toggle')">
+                    <span class="slider round"></span>
+                </label>
+                Simple Moving Average (Window = 20 Candles)
+            </div>
+            <div class="control-group">
+                <label class="switch">
+                    <input type="checkbox" id="sma50-toggle" onchange="toggleIndicator('sma50-toggle')">
+                    <span class="slider round"></span>
+                </label>
+                Simple Moving Average (Window = 50 Candles)
+            </div>
+            <div class="control-group">
+                <label class="switch">
+                    <input type="checkbox" id="bollinger-toggle" onchange="toggleIndicator('bollinger-toggle')">
+                    <span class="slider round"></span>
+                </label>
+                Bollinger Bands (Window = 14 Candles)
+            </div>
+            <div class="control-group">
+                <label class="switch">
+                    <input type="checkbox" id="news-toggle" checked onchange="toggleIndicator('news-toggle')">
+                    <span class="slider round"></span>
+                </label>
+                Economic News Events:
+                <select id="news-selector" onchange="updateDashboard()">
+                    <option value="HIGH" selected>High Impact</option>
+                    <option value="MEDIUM">Medium Impact</option>
+                    <option value="LOW">Low Impact</option>
+                    <option value="NONE">No Impact</option>
+                </select>
+            </div>
+        </div>
+        <div id="heatmap">
+            <!-- Your heatmap here -->
+        </div>
+    </div>
+</div>
+</body>
+</html>
