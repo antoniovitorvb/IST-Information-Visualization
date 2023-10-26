@@ -1,0 +1,64 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+}
+
+#dashboard {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+}
+
+#charts-section {
+    flex: 0 0 65%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+
+#controls-heatmap-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+#candlestick-chart {
+    height: 55%;
+}
+
+#volume-histogram {
+    height: 15%;
+}
+
+#log-return-line-chart {
+    height: 15%;
+}
+
+#atr-line-chart {
+    height: 15%;
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+select, input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+}
+
+select:focus, input:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
