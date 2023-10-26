@@ -129,7 +129,6 @@ function createCandlestickChart(data, containerId) {
         .attr("r", 8)
         .attr("fill", "#ffec00")
         .on("mouseover", function(event, d) {
-            // Display a tooltip with news details
             const newsList = d.News.map(n => `${n.Impact.charAt(0) + n.Impact.slice(1).toLowerCase()} Impact: ${n.Name}`).join("<br>");
             d3.select("body").append("div")
                 .attr("class", "tooltip")
@@ -297,27 +296,3 @@ function determineDecimalPlaces(averageClose) {
         return 5;
     }
 }
-
-function toggleIndicator(toggleId) {
-    const isDisplayed = document.getElementById(toggleId).checked;
-    let targetClass;
-    switch (toggleId) {
-        case 'sma20-toggle':
-            targetClass = '.sma20';
-            break;
-        case 'sma50-toggle':
-            targetClass = '.sma50';
-            break;
-        case 'bollinger-toggle':
-            targetClass = '.upperBollinger, .lowerBollinger';
-            break;
-        case 'news-toggle':
-            targetClass = '.news-warning';
-            break;
-        default:
-            return;
-    }
-    d3.selectAll(targetClass).style('display', isDisplayed ? 'block' : 'none');
-}
-
-

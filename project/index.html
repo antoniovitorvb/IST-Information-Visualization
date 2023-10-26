@@ -23,7 +23,7 @@
     </div>
     <div id="controls-heatmap-section">
         <div id="controls">
-            <strong>Indicator Settings</strong>
+            <strong>General Settings</strong>
             <div class="control-group">
                 <label for="asset-selector">Asset:</label>
                 <select id="asset-selector" onchange="updateDashboard()">
@@ -50,28 +50,28 @@
             <strong>Indicator Settings</strong>
             <div class="control-group">
                 <label class="switch">
-                    <input type="checkbox" id="sma20-toggle" checked onchange="toggleIndicator('sma20-toggle')">
+                    <input type="checkbox" id="sma20-toggle" checked onchange="toggleElement('sma20-toggle')">
                     <span class="slider round"></span>
                 </label>
-                Simple Moving Average (Window = 20 Candles)
+                Fast Moving Average (Fast Trend Analysis)
             </div>
             <div class="control-group">
                 <label class="switch">
-                    <input type="checkbox" id="sma50-toggle" onchange="toggleIndicator('sma50-toggle')">
+                    <input type="checkbox" id="sma50-toggle" onchange="toggleElement('sma50-toggle')">
                     <span class="slider round"></span>
                 </label>
-                Simple Moving Average (Window = 50 Candles)
+                Slow Moving Average (Slow Trend Analysis)
             </div>
             <div class="control-group">
                 <label class="switch">
-                    <input type="checkbox" id="bollinger-toggle" onchange="toggleIndicator('bollinger-toggle')">
+                    <input type="checkbox" id="bollinger-toggle" onchange="toggleElement('bollinger-toggle')">
                     <span class="slider round"></span>
                 </label>
-                Bollinger Bands (Window = 14 Candles)
+                Volatility Bollinger Bands (Volatility Analysis)
             </div>
             <div class="control-group">
                 <label class="switch">
-                    <input type="checkbox" id="news-toggle" checked onchange="toggleIndicator('news-toggle')">
+                    <input type="checkbox" id="news-toggle" checked onchange="toggleElement('news-toggle')">
                     <span class="slider round"></span>
                 </label>
                 Economic News Events:

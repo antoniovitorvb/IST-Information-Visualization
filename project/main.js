@@ -36,8 +36,6 @@ function mergePriceAndNewsData() {
     });
 }
 
-
-
 async function selectData() {
     const asset = document.getElementById("asset-selector").value;
     const base = asset.slice(0, 3);
@@ -60,10 +58,11 @@ async function createDashboard() {
     createVolumeHistogram(priceData, "volume-histogram");
     createLogReturnChart(priceData, "log-return-line-chart");
     createATRChart(priceData, "atr-line-chart");
-    toggleIndicator('sma20-toggle');
-    toggleIndicator('sma50-toggle');
-    toggleIndicator('bollinger-toggle');
-    toggleIndicator('news-toggle');
+    createVerticalLine(priceData, "charts-section");
+    toggleElement('sma20-toggle');
+    toggleElement('sma50-toggle');
+    toggleElement('bollinger-toggle');
+    toggleElement('news-toggle');
 }
 
 async function updateDashboard() {
@@ -72,8 +71,9 @@ async function updateDashboard() {
     updateVolumeHistogram(priceData, "volume-histogram");
     updateLogReturnChart(priceData, "log-return-line-chart");
     updateATRChart(priceData, "atr-line-chart");
-    toggleIndicator('sma20-toggle');
-    toggleIndicator('sma50-toggle');
-    toggleIndicator('bollinger-toggle');
-    toggleIndicator('news-toggle');
+    updateVerticalLine(priceData, "charts-section");
+    toggleElement('sma20-toggle');
+    toggleElement('sma50-toggle');
+    toggleElement('bollinger-toggle');
+    toggleElement('news-toggle');
 }
