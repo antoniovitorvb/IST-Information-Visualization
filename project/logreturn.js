@@ -52,7 +52,7 @@ function createLogReturnChart(data, containerId) {
         .attr("text-anchor", "end")
         .attr("alignment-baseline", "middle")
         .attr("font-size", "10px")
-        .text(d => d.toFixed(6));
+        .text(d => formatLogReturn(d));
 
     svg.append("line")
         .attr("class", "zeroLine")
@@ -71,6 +71,17 @@ function createLogReturnChart(data, containerId) {
         .attr("alignment-baseline", "middle")
         .attr("font-size", "10px")
         .text("Zero");
+
+    svg.append("text")
+        .attr("class", "chartLabel")
+        .attr("x", width + 10)
+        .attr("y", height / 2)
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .attr("transform", `rotate(90, ${width + 10}, ${height / 2})`)
+        .attr("font-size", "14px")
+        .style("font-weight", "bold")
+        .text("Log - Returns");
 }
 
 function updateLogReturnChart(data, containerId) {
@@ -122,7 +133,7 @@ function updateLogReturnChart(data, containerId) {
         .merge(horizontalLabels)
         .transition(t)
         .attr("y", d => yScale(d))
-        .text(d => d.toFixed(6));
+        .text(d => formatLogReturn(d));
     horizontalLabels.exit().remove();
 
     svg.select(".zeroLine")
@@ -136,3 +147,8 @@ function updateLogReturnChart(data, containerId) {
         .duration(750)
         .attr("y", yScale(0));
 }
+
+function formatLogReturn(value) {
+    return (value * 100).toFixed(2) + '%';
+}
+

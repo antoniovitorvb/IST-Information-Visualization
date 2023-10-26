@@ -40,7 +40,7 @@ function createVolumeHistogram(data, containerId) {
         .attr("text-anchor", "end")
         .attr("alignment-baseline", "middle")
         .attr("font-size", "10px")
-        .text(d => d.toFixed(0));
+        .text(d => formatVolume(d));
 
     svg.selectAll(".bar")
         .data(data)
@@ -51,6 +51,17 @@ function createVolumeHistogram(data, containerId) {
         .attr("width", xScale.bandwidth())
         .attr("height", d => height - yScale(d.Volume))
         .attr("fill", "#4682B4");
+
+    svg.append("text")
+        .attr("class", "chartLabel")
+        .attr("x", width + 10)
+        .attr("y", height / 2)
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .attr("transform", `rotate(90, ${width + 10}, ${height / 2})`)
+        .attr("font-size", "14px")
+        .style("font-weight", "bold")
+        .text("Volume Histogram");
 }
 
 function updateVolumeHistogram(data, containerId) {
@@ -92,7 +103,7 @@ function updateVolumeHistogram(data, containerId) {
         .merge(horizontalLabels)
         .transition(t)
         .attr("y", d => yScale(d))
-        .text(d => d.toFixed(0));
+        .text(d => formatVolume(d));
     horizontalLabels.exit().remove();
 
     const bars = svg.selectAll(".bar").data(data);
@@ -115,5 +126,15 @@ function updateVolumeHistogram(data, containerId) {
         .attr("height", 0)  // Exit height of 0
         .remove();
 
+}
+
+function formatVolume(volume) {
+    if (volume >= 1e6) {
+        return (volume / 1e6).toFixed(1) + 'M';
+    } else if (volume >= 1e3) {
+        return (volume / 1e3).toFixed(1) + 'K';
+    } else {
+        return volume;
+    }
 }
 

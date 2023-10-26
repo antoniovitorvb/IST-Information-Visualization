@@ -1,7 +1,7 @@
 let priceData;
 let newsData;
 
-const margin = { top: 10, right: 10, bottom: 20, left: 60 };
+const margin = { top: 10, right: 20, bottom: 20, left: 60 };
 
 const parseSelectorDate = d3.timeParse("%Y-%m-%d %H:%M");
 const parsePriceDate = d3.timeParse("%d.%m.%Y %H:%M:%S.%L");
