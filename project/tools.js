@@ -1,3 +1,5 @@
+let lastClickedDate = null;
+
 function formatVolume(volume) {
     if (volume >= 1e6) {
         return (volume / 1e6).toFixed(1) + 'M';
@@ -35,42 +37,68 @@ function yAxisGenerator(scale, ticks = 10) {
     return Array.from({length: ticks}, (_, i) => domain[0] + i * interval);
 }
 
+function getNearestDataPoint(mouseX, data, xScale) {
+    const dates = data.map(d => xScale(d.Time) + xScale.bandwidth() / 2);
+    const nearestDate = dates.reduce((a, b) => {
+        return Math.abs(b - mouseX) < Math.abs(a - mouseX) ? b : a;
+    });
+    return data[dates.indexOf(nearestDate)];
+}
+
 function attachMouseEvents(data, container, verticalLine, xScale, paddingLeft) {
-    d3.select(container).on("mouseover", function() {
+    d3.select(container)
+    .on("mouseover", function() {
         verticalLine.style("display", "block");
-    }).on("mousemove", function(event) {
-        const mouseX = event.layerX - margin.left - paddingLeft;
-        const dates = data.map(d => xScale(d.Time) + xScale.bandwidth() / 2);
-        const nearestDate = dates.reduce((a, b) => {
-            return Math.abs(b - mouseX) < Math.abs(a - mouseX) ? b : a;
-        });
-        verticalLine.style("left", `${nearestDate + margin.left + paddingLeft}px`);
-
-        const nearestDataPoint = data[dates.indexOf(nearestDate)];
-        updateChartLabels(nearestDataPoint);
-
-    }).on("mouseout", function() {
+    })
+    .on("mouseout", function() {
         verticalLine.style("display", "none");
+    })
+    .on("mousemove click", function(event) {
+        const mouseX = event.layerX - margin.left - paddingLeft;
+        const nearestDataPoint = getNearestDataPoint(mouseX, data, xScale);
+        if (event.type === "mousemove") {
+            verticalLine.style("left", `${xScale(nearestDataPoint.Time) + xScale.bandwidth() / 2 + margin.left + paddingLeft}px`);
+            updateChartLabels(nearestDataPoint);
+        } else if (event.type === "click") {
+            updateSelectionLabels(nearestDataPoint);
+        }
     });
 }
 
+
 function updateChartLabels(data) {
-    // Update the text label on the candlestick chart
     d3.select("#candlestick-chart").select(".animated-label")
         .html(`<tspan font-weight="bold">Date/Time:</tspan> ${data.Time} &emsp; <tspan font-weight="bold">Open:</tspan> ${data.Open} &emsp; <tspan font-weight="bold">High:</tspan> ${data.High} &emsp; <tspan font-weight="bold">Low:</tspan> ${data.Low} &emsp; <tspan font-weight="bold">Close:</tspan> ${data.Close}`);
-
-    // Update the text label on the Volume histogram
     d3.select("#volume-histogram").select(".animated-label")
         .html(`<tspan font-weight="bold">Volume:</tspan> ${formatVolume(data.Volume)}`);
-
-    // Update the text label on the Log Return chart
     d3.select("#log-return-line-chart").select(".animated-label")
         .html(`<tspan font-weight="bold">Log-Return:</tspan> ${formatLogReturn(data.Log_Return)}`);
-
-    // Update the text label on the ATR chart
     d3.select("#atr-line-chart").select(".animated-label")
         .html(`<tspan font-weight="bold">ATR:</tspan> ${formatPriceInPips(data.ATR)}`);
 }
+
+function updateSelectionLabels(data) {
+    const candlestickLabel = d3.select("#candlestick-chart").select(".selection-label");
+    const volumeLabel = d3.select("#volume-histogram").select(".selection-label");
+    const logReturnLabel = d3.select("#log-return-line-chart").select(".selection-label");
+    const atrLabel = d3.select("#atr-line-chart").select(".selection-label");
+    if (lastClickedDate === data.Time) {
+        const isHidden = candlestickLabel.style("display") === "none";
+        const displayValue = isHidden ? "block" : "none";
+        candlestickLabel.style("display", displayValue);
+        volumeLabel.style("display", displayValue);
+        logReturnLabel.style("display", displayValue);
+        atrLabel.style("display", displayValue);
+        lastClickedDate = isHidden ? data.Time : null;
+    } else {
+        candlestickLabel.html(`<tspan font-weight="bold">Date/Time:</tspan> ${data.Time} &emsp; <tspan font-weight="bold">Open:</tspan> ${data.Open} &emsp; <tspan font-weight="bold">High:</tspan> ${data.High} &emsp; <tspan font-weight="bold">Low:</tspan> ${data.Low} &emsp; <tspan font-weight="bold">Close:</tspan> ${data.Close}`).style("display", "block");
+        volumeLabel.html(`<tspan font-weight="bold">Volume:</tspan> ${formatVolume(data.Volume)}`).style("display", "block");
+        logReturnLabel.html(`<tspan font-weight="bold">Log-Return:</tspan> ${formatLogReturn(data.Log_Return)}`).style("display", "block");
+        atrLabel.html(`<tspan font-weight="bold">ATR:</tspan> ${formatPriceInPips(data.ATR)}`).style("display", "block");
+        lastClickedDate = data.Time;
+    }
+}
+
 
 function createVerticalLine(data) {
     const container = document.getElementById("charts-section");
@@ -102,13 +130,8 @@ function updateVerticalLine(data) {
     const paddingLeft = parseFloat(computedStyle.paddingLeft);
     const paddingRight = parseFloat(computedStyle.paddingRight);
     const width = container.offsetWidth - margin.left - margin.right - paddingLeft - paddingRight;
-
     const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
-
     const verticalLine = d3.select(container).select(".vertical-line");
-
-    d3.select(container).on("mousemove", null);
-
     attachMouseEvents(data, container, verticalLine, xScale, paddingLeft);
 }
 

@@ -69,6 +69,14 @@ function createVolumeHistogram(data, containerId) {
         .attr("y", 10)
         .attr("text-anchor", "start")
         .attr("font-size", "14px");
+
+    svg.append("text")
+        .attr("class", "selection-label")
+        .attr("x", 10)
+        .attr("y", 25)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px")
+        .attr("fill", "#ad2aee");
 }
 
 function updateVolumeHistogram(data, containerId) {
