@@ -38,13 +38,6 @@ function createCorrelationHeatmap(containerId, data) {
     const tooltip = d3.select(`#${containerId}`)
         .append("div")
         .attr("class", "heatmap-tooltip")
-        .style("position", "absolute")
-        .style("z-index", "10")
-        .style("visibility", "hidden")
-        .style("background-color", "white")
-        .style("border", "solid 1px #ccc")
-        .style("padding", "5px")
-        .style("border-radius", "3px");
 
     svg.selectAll("rect")
         .data(matrix.flat())
@@ -57,7 +50,7 @@ function createCorrelationHeatmap(containerId, data) {
         .on("mouseover", function (event, d) {
             const i = Math.floor(event.currentTarget.getAttribute("x") / size);
             const j = Math.floor(event.currentTarget.getAttribute("y") / size);
-            tooltip.html(`Asset1: ${assets[j]}<br>Asset2: ${assets[i]}<br>Correlation: ${d.toFixed(2)}`)
+            tooltip.html(`${assets[j]} vs ${assets[i]}<br>Correlation: ${d.toFixed(2)}`)
                 .style("visibility", "visible")
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY + 10) + "px");
