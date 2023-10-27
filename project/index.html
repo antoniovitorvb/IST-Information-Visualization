@@ -37,15 +37,24 @@
                     <option value="USDJPY">USDJPY</option>
                 </select>
             </div>
+            <div class="control-group">
+                <label for="timeframe-selector">Timeframe:</label>
+                <select id="timeframe-selector" onchange="updateDashboard()">
+                    <option value="hourly">Hourly</option>
+                    <option value="daily" selected>Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+            </div>
             <strong>Period Settings</strong>
             <div class="control-group">
                 <label for="start-date">Start Date/Time:</label>
-                <input type="date" id="start-date" value="2019-01-02" onchange="updateDashboard()">
+                <input type="date" id="start-date" value="2019-10-01" onchange="updateDashboard()">
                 <input type="time" id="start-time" value="08:00" onchange="updateDashboard()">
             </div>
             <div class="control-group">
                 <label for="end-date">End Date/Time:</label>
-                <input type="date" id="end-date" value="2019-01-07" onchange="updateDashboard()">
+                <input type="date" id="end-date" value="2020-06-07" onchange="updateDashboard()">
                 <input type="time" id="end-time" value="08:00" onchange="updateDashboard()">
             </div>
             <strong>Indicator Settings</strong>
@@ -58,7 +67,7 @@
             </div>
             <div class="control-group">
                 <label class="switch">
-                    <input type="checkbox" id="sma50-toggle" onchange="toggleElement('sma50-toggle')">
+                    <input type="checkbox" id="sma50-toggle" checked onchange="toggleElement('sma50-toggle')">
                     <span class="slider round"></span>
                 </label>
                 Slow Moving Average (Slow Trend Analysis)
@@ -72,7 +81,7 @@
             </div>
             <div class="control-group">
                 <label class="switch">
-                    <input type="checkbox" id="news-toggle" checked onchange="toggleElement('news-toggle')">
+                    <input type="checkbox" id="news-toggle" onchange="toggleElement('news-toggle')">
                     <span class="slider round"></span>
                 </label>
                 Economic News Events:

@@ -149,12 +149,12 @@ select:focus, input:focus {
 
 .highlighted {
     stroke: #ad2aee;
-    stroke-width: 4px;
+    stroke-width: 2px;
     fill: #ad2aee;
 }
 
 .selected {
     stroke: #ad2aee;
-    stroke-width: 4px;
+    stroke-width: 2px;
     fill: #ad2aee;
 }
