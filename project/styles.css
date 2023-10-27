@@ -147,3 +147,14 @@ select:focus, input:focus {
     pointer-events: none;
 }
 
+.highlighted {
+    stroke: #ad2aee;
+    stroke-width: 4px;
+    fill: #ad2aee;
+}
+
+.selected {
+    stroke: #ad2aee;
+    stroke-width: 4px;
+    fill: #ad2aee;
+}

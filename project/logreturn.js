@@ -1,9 +1,6 @@
-function createLogReturnChart(data, containerId) {
+function createLogReturnChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
     const yScale = d3.scaleLinear().domain(d3.extent(data, d => +d.Log_Return)).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`)
@@ -86,7 +83,7 @@ function createLogReturnChart(data, containerId) {
     svg.append("text")
         .attr("class", "animated-label")
         .attr("x", 10)
-        .attr("y", 10)
+        .attr("y", 0)
         .attr("text-anchor", "start")
         .attr("font-size", "14px");
 
@@ -97,18 +94,16 @@ function createLogReturnChart(data, containerId) {
         .attr("text-anchor", "start")
         .attr("font-size", "14px")
         .attr("fill", "#ad2aee");
+
+    return yScale;
 }
 
-function updateLogReturnChart(data, containerId) {
+function updateLogReturnChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
     const yScale = d3.scaleLinear().domain(d3.extent(data, d => +d.Log_Return)).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`).select("svg").select("g");
-
     const t = d3.transition().duration(750);
 
     const line = d3.line()
@@ -161,4 +156,6 @@ function updateLogReturnChart(data, containerId) {
         .transition()
         .duration(750)
         .attr("y", yScale(0));
+
+    return yScale;
 }

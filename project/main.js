@@ -70,11 +70,15 @@ async function selectData() {
 
 async function createDashboard() {
     await selectData();
-    createCandlestickChart(totalData, "candlestick-chart");
-    createVolumeHistogram(totalData, "volume-histogram");
-    createLogReturnChart(totalData, "log-return-line-chart");
-    createATRChart(totalData, "atr-line-chart");
-    createVerticalLine(totalData);
+    const width = widthGenerator("charts-section", margin);
+    const xScale = xScaleGenerator(totalData, width);
+    const yScales = {
+        candlestick: createCandlestickChart("candlestick-chart", totalData, width, xScale),
+        volume: createVolumeHistogram("volume-histogram", totalData, width, xScale),
+        logReturn: createLogReturnChart("log-return-line-chart", totalData, width, xScale),
+        atr: createATRChart("atr-line-chart", totalData, width, xScale)
+    }
+    createVerticalLine(totalData, xScale, yScales);
     toggleElement('sma20-toggle');
     toggleElement('sma50-toggle');
     toggleElement('bollinger-toggle');
@@ -83,11 +87,15 @@ async function createDashboard() {
 
 async function updateDashboard() {
     await selectData();
-    updateCandlestickChart(totalData, "candlestick-chart");
-    updateVolumeHistogram(totalData, "volume-histogram");
-    updateLogReturnChart(totalData, "log-return-line-chart");
-    updateATRChart(totalData, "atr-line-chart");
-    updateVerticalLine(totalData);
+    const width = widthGenerator("charts-section", margin);
+    const xScale = xScaleGenerator(totalData, width);
+    const yScales = {
+        candlestick: updateCandlestickChart("candlestick-chart", totalData, width, xScale),
+        volume: updateVolumeHistogram("volume-histogram", totalData, width, xScale),
+        logReturn: updateLogReturnChart("log-return-line-chart", totalData, width, xScale),
+        atr: updateATRChart("atr-line-chart", totalData, width, xScale)
+    }
+    updateVerticalLine(totalData, xScale, yScales);
     toggleElement('sma20-toggle');
     toggleElement('sma50-toggle');
     toggleElement('bollinger-toggle');

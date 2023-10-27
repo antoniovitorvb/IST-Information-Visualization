@@ -1,9 +1,6 @@
-function createCandlestickChart(data, containerId) {
+function createCandlestickChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]).padding(0.1);
     const yScale = d3.scaleLinear().domain([d3.min(data, d => d.Low), d3.max(data, d => d.High)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`)
@@ -140,7 +137,7 @@ function createCandlestickChart(data, containerId) {
     svg.append("text")
         .attr("class", "animated-label")
         .attr("x", 10)
-        .attr("y", 10)
+        .attr("y", 0)
         .attr("text-anchor", "start")
         .attr("font-size", "14px");
 
@@ -151,18 +148,16 @@ function createCandlestickChart(data, containerId) {
         .attr("text-anchor", "start")
         .attr("font-size", "14px")
         .attr("fill", "#ad2aee");
+
+    return yScale;
 }
 
-function updateCandlestickChart(data, containerId) {
+function updateCandlestickChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]).padding(0.1);
     const yScale = d3.scaleLinear().domain([d3.min(data, d => d.Low), d3.max(data, d => d.High)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId} svg g`);
-
     const t = d3.transition().duration(750);
 
     const bars = svg.selectAll(".bar").data(data);
@@ -296,4 +291,6 @@ function updateCandlestickChart(data, containerId) {
         .attr("r", 8)
         .attr("fill", "#ffec00");
     newsWarnings.exit().remove();
+
+    return yScale;
 }

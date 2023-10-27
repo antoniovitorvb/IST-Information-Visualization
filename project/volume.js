@@ -1,9 +1,6 @@
-function createVolumeHistogram(data, containerId) {
+function createVolumeHistogram(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]).padding(0.1);
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.Volume)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`)
@@ -66,7 +63,7 @@ function createVolumeHistogram(data, containerId) {
     svg.append("text")
         .attr("class", "animated-label")
         .attr("x", 10)
-        .attr("y", 10)
+        .attr("y", 0)
         .attr("text-anchor", "start")
         .attr("font-size", "14px");
 
@@ -77,18 +74,16 @@ function createVolumeHistogram(data, containerId) {
         .attr("text-anchor", "start")
         .attr("font-size", "14px")
         .attr("fill", "#ad2aee");
+
+    return yScale;
 }
 
-function updateVolumeHistogram(data, containerId) {
+function updateVolumeHistogram(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]).padding(0.1);
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.Volume)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`).select("svg").select("g");
-
     const t = d3.transition().duration(750);
 
     const xAxis = xAxisGenerator(xScale);
@@ -141,4 +136,5 @@ function updateVolumeHistogram(data, containerId) {
         .attr("height", 0)  // Exit height of 0
         .remove();
 
+    return yScale;
 }

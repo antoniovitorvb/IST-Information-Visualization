@@ -1,9 +1,6 @@
-function createATRChart(data, containerId) {
+function createATRChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.ATR)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`)
@@ -68,7 +65,7 @@ function createATRChart(data, containerId) {
     svg.append("text")
         .attr("class", "animated-label")
         .attr("x", 10)
-        .attr("y", 10)
+        .attr("y", 0)
         .attr("text-anchor", "start")
         .attr("font-size", "14px");
 
@@ -79,18 +76,16 @@ function createATRChart(data, containerId) {
         .attr("text-anchor", "start")
         .attr("font-size", "14px")
         .attr("fill", "#ad2aee");
+
+    return yScale;
 }
 
-function updateATRChart(data, containerId) {
+function updateATRChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.ATR)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`).select("svg").select("g");
-
     const t = d3.transition().duration(750);
 
     const line = d3.line()
@@ -132,4 +127,5 @@ function updateATRChart(data, containerId) {
         .attr("y", d => yScale(d))
         .text(d => formatPriceInPips(d));
 
+    return yScale;
 }
