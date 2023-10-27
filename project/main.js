@@ -52,8 +52,16 @@ async function selectData() {
     mergePriceAndNewsData();
 }
 
+async function getDate() {
+    startDate = document.getElementById("start-date").value;
+    endDate = document.getElementById("end-date").value;
+
+    return {startDate, endDate}
+}
+
 async function createDashboard() {
     await selectData();
+    daterange = await getDate();
     createCandlestickChart(priceData, "candlestick-chart");
     createVolumeHistogram(priceData, "volume-histogram");
     createLogReturnChart(priceData, "log-return-line-chart");
@@ -67,6 +75,7 @@ async function createDashboard() {
 
 async function updateDashboard() {
     await selectData();
+    daterange = await getDate();
     updateCandlestickChart(priceData, "candlestick-chart");
     updateVolumeHistogram(priceData, "volume-histogram");
     updateLogReturnChart(priceData, "log-return-line-chart");
