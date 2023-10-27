@@ -35,6 +35,17 @@ function createCorrelationHeatmap(containerId, data) {
     const colorScale = d3.scaleSequential(d3.interpolateRdBu)
         .domain([-1, 1]);
 
+    const tooltip = d3.select(`#${containerId}`)
+        .append("div")
+        .attr("class", "heatmap-tooltip")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .style("background-color", "white")
+        .style("border", "solid 1px #ccc")
+        .style("padding", "5px")
+        .style("border-radius", "3px");
+
     svg.selectAll("rect")
         .data(matrix.flat())
         .enter().append("rect")
@@ -42,7 +53,22 @@ function createCorrelationHeatmap(containerId, data) {
         .attr("y", (d, i) => labelMargin + Math.floor(i / assets.length) * size)
         .attr("width", size)
         .attr("height", size)
-        .attr("fill", d => colorScale(d));
+        .attr("fill", d => colorScale(d))
+        .on("mouseover", function (event, d) {
+            const i = Math.floor(event.currentTarget.getAttribute("x") / size);
+            const j = Math.floor(event.currentTarget.getAttribute("y") / size);
+            tooltip.html(`Asset1: ${assets[j]}<br>Asset2: ${assets[i]}<br>Correlation: ${d.toFixed(2)}`)
+                .style("visibility", "visible")
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY + 10) + "px");
+        })
+        .on("mousemove", function (event) {
+            tooltip.style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY + 10) + "px");
+        })
+        .on("mouseout", function () {
+            tooltip.style("visibility", "hidden");
+        });
 
     svg.selectAll(".xLabel")
         .data(assets)
