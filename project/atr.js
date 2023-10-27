@@ -1,9 +1,6 @@
-function createATRChart(data, containerId) {
+function createATRChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.ATR)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`)
@@ -43,9 +40,6 @@ function createATRChart(data, containerId) {
         .attr("stroke", "#ccc")
         .attr("stroke-dasharray", "5,5");
 
-    const averageClose = d3.mean(data, d => +d.Close);
-    const pipSize = averageClose > 2 ? 0.01 : 0.0001;
-
     svg.selectAll(".horizontalLabel")
         .data(horizontalLinesData)
         .enter().append("text")
@@ -55,8 +49,7 @@ function createATRChart(data, containerId) {
         .attr("text-anchor", "end")
         .attr("alignment-baseline", "middle")
         .attr("font-size", "10px")
-        .text(d => formatATRinPips(d, pipSize));
-
+        .text(d => formatPriceInPips(d));
 
     svg.append("text")
         .attr("class", "chartLabel")
@@ -68,19 +61,32 @@ function createATRChart(data, containerId) {
         .attr("font-size", "14px")
         .style("font-weight", "bold")
         .text("Average True Range");
+
+    svg.append("text")
+        .attr("class", "animated-label")
+        .attr("x", 10)
+        .attr("y", 0)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px");
+
+    svg.append("text")
+        .attr("class", "selection-label")
+        .attr("x", 10)
+        .attr("y", 25)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px")
+        .attr("fill", "#ad2aee");
+
+    return yScale;
 }
 
-function updateATRChart(data, containerId) {
+function updateATRChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.ATR)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`).select("svg").select("g");
-
-    const t = d3.transition().duration(750);
+    const t = d3.transition().duration(1000);
 
     const line = d3.line()
         .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
@@ -89,11 +95,11 @@ function updateATRChart(data, containerId) {
     svg.select(".atrLine")
         .datum(data)
         .transition()
-        .duration(750)
+        .duration(1000)
         .attr("d", line);
 
     const xAxis = xAxisGenerator(xScale);
-    svg.select(".x-axis").transition().duration(750).call(xAxis);
+    svg.select(".x-axis").transition().duration(1000).call(xAxis);
 
     const yAxis = yAxisGenerator(yScale, 5);
     const horizontalLines = svg.selectAll(".horizontalLine").data(yAxis);
@@ -109,9 +115,6 @@ function updateATRChart(data, containerId) {
         .attr("stroke-dasharray", "5,5");
     horizontalLines.exit().remove();
 
-    const averageClose = d3.mean(data, d => +d.Close);
-    const pipSize = averageClose > 2 ? 0.01 : 0.0001;
-
     const horizontalLabels = svg.selectAll(".horizontalLabel").data(yAxis);
     horizontalLabels.enter().append("text")
         .attr("class", "horizontalLabel")
@@ -122,11 +125,7 @@ function updateATRChart(data, containerId) {
         .merge(horizontalLabels)
         .transition(t)
         .attr("y", d => yScale(d))
-        .text(d => formatATRinPips(d, pipSize));
+        .text(d => formatPriceInPips(d));
 
+    return yScale;
 }
-
-function formatATRinPips(value, pipSize) {
-    return (value / pipSize).toFixed(2) + " Pips";
-}
-

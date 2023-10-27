@@ -1,9 +1,6 @@
-function createLogReturnChart(data, containerId) {
+function createLogReturnChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
     const yScale = d3.scaleLinear().domain(d3.extent(data, d => +d.Log_Return)).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`)
@@ -82,19 +79,32 @@ function createLogReturnChart(data, containerId) {
         .attr("font-size", "14px")
         .style("font-weight", "bold")
         .text("Log - Returns");
+
+    svg.append("text")
+        .attr("class", "animated-label")
+        .attr("x", 10)
+        .attr("y", 0)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px");
+
+    svg.append("text")
+        .attr("class", "selection-label")
+        .attr("x", 10)
+        .attr("y", 25)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px")
+        .attr("fill", "#ad2aee");
+
+    return yScale;
 }
 
-function updateLogReturnChart(data, containerId) {
+function updateLogReturnChart(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]);
     const yScale = d3.scaleLinear().domain(d3.extent(data, d => +d.Log_Return)).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`).select("svg").select("g");
-
-    const t = d3.transition().duration(750);
+    const t = d3.transition().duration(1000);
 
     const line = d3.line()
         .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
@@ -103,11 +113,11 @@ function updateLogReturnChart(data, containerId) {
     svg.select(".logReturnLine")
         .datum(data)
         .transition()
-        .duration(750)
+        .duration(1000)
         .attr("d", line);
 
     const xAxis = xAxisGenerator(xScale);
-    svg.select(".x-axis").transition().duration(750).call(xAxis);
+    svg.select(".x-axis").transition().duration(1000).call(xAxis);
 
     const yAxis = yAxisGenerator(yScale, 5);
     const horizontalLines = svg.selectAll(".horizontalLine").data(yAxis);
@@ -138,17 +148,14 @@ function updateLogReturnChart(data, containerId) {
 
     svg.select(".zeroLine")
         .transition()
-        .duration(750)
+        .duration(1000)
         .attr("y1", yScale(0))
         .attr("y2", yScale(0));
 
     svg.select(".zeroLabel")
         .transition()
-        .duration(750)
+        .duration(1000)
         .attr("y", yScale(0));
-}
 
-function formatLogReturn(value) {
-    return (value * 100).toFixed(2) + '%';
+    return yScale;
 }
-

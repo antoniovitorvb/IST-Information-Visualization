@@ -1,9 +1,6 @@
-function createVolumeHistogram(data, containerId) {
+function createVolumeHistogram(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]).padding(0.1);
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.Volume)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`)
@@ -62,19 +59,32 @@ function createVolumeHistogram(data, containerId) {
         .attr("font-size", "14px")
         .style("font-weight", "bold")
         .text("Volume Histogram");
+
+    svg.append("text")
+        .attr("class", "animated-label")
+        .attr("x", 10)
+        .attr("y", 0)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px");
+
+    svg.append("text")
+        .attr("class", "selection-label")
+        .attr("x", 10)
+        .attr("y", 25)
+        .attr("text-anchor", "start")
+        .attr("font-size", "14px")
+        .attr("fill", "#ad2aee");
+
+    return yScale;
 }
 
-function updateVolumeHistogram(data, containerId) {
+function updateVolumeHistogram(containerId, data, width, xScale) {
     const container = document.getElementById(containerId);
-    const width = container.offsetWidth - margin.left - margin.right;
     const height = container.offsetHeight - margin.top - margin.bottom;
-
-    const xScale = d3.scaleBand().domain(data.map(d => d.Time)).range([0, width]).padding(0.1);
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.Volume)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`).select("svg").select("g");
-
-    const t = d3.transition().duration(750);
+    const t = d3.transition().duration(1000);
 
     const xAxis = xAxisGenerator(xScale);
     svg.select(".x-axis").transition(t).call(xAxis);
@@ -126,15 +136,5 @@ function updateVolumeHistogram(data, containerId) {
         .attr("height", 0)  // Exit height of 0
         .remove();
 
+    return yScale;
 }
-
-function formatVolume(volume) {
-    if (volume >= 1e6) {
-        return (volume / 1e6).toFixed(1) + 'M';
-    } else if (volume >= 1e3) {
-        return (volume / 1e3).toFixed(1) + 'K';
-    } else {
-        return volume;
-    }
-}
-
