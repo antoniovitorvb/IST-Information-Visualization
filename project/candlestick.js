@@ -158,7 +158,7 @@ function updateCandlestickChart(containerId, data, width, xScale) {
     const yScale = d3.scaleLinear().domain([d3.min(data, d => d.Low), d3.max(data, d => d.High)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId} svg g`);
-    const t = d3.transition().duration(750);
+    const t = d3.transition().duration(1000);
 
     const bars = svg.selectAll(".bar").data(data);
     bars.enter().append("rect")

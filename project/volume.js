@@ -84,7 +84,7 @@ function updateVolumeHistogram(containerId, data, width, xScale) {
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.Volume)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`).select("svg").select("g");
-    const t = d3.transition().duration(750);
+    const t = d3.transition().duration(1000);
 
     const xAxis = xAxisGenerator(xScale);
     svg.select(".x-axis").transition(t).call(xAxis);

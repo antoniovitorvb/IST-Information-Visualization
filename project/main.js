@@ -148,6 +148,7 @@ async function createDashboard() {
     toggleElement('sma50-toggle');
     toggleElement('bollinger-toggle');
     toggleElement('news-toggle');
+    createCorrelationHeatmap("heatmap", priceData);
 }
 
 async function updateDashboard() {
@@ -165,4 +166,5 @@ async function updateDashboard() {
     toggleElement('sma50-toggle');
     toggleElement('bollinger-toggle');
     toggleElement('news-toggle');
+    updateCorrelationHeatmap("heatmap", priceData);
 }

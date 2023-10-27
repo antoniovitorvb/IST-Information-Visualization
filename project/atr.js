@@ -86,7 +86,7 @@ function updateATRChart(containerId, data, width, xScale) {
     const yScale = d3.scaleLinear().domain([0, d3.max(data, d => +d.ATR)]).range([height, 0]);
 
     const svg = d3.select(`#${containerId}`).select("svg").select("g");
-    const t = d3.transition().duration(750);
+    const t = d3.transition().duration(1000);
 
     const line = d3.line()
         .x(d => xScale(d.Time) + xScale.bandwidth() / 2)
@@ -95,11 +95,11 @@ function updateATRChart(containerId, data, width, xScale) {
     svg.select(".atrLine")
         .datum(data)
         .transition()
-        .duration(750)
+        .duration(1000)
         .attr("d", line);
 
     const xAxis = xAxisGenerator(xScale);
-    svg.select(".x-axis").transition().duration(750).call(xAxis);
+    svg.select(".x-axis").transition().duration(1000).call(xAxis);
 
     const yAxis = yAxisGenerator(yScale, 5);
     const horizontalLines = svg.selectAll(".horizontalLine").data(yAxis);
